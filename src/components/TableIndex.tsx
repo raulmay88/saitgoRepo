@@ -39,16 +39,16 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
               ))}
               <td>
                 <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-1"
+                  className="text-cyan-900 hover:text-cyan-700 font-bold py-2 px-4 rounded m-1"
                   aria-label="View"
                 >
-                  <EyeIcon className="h-4 w-4" />
+                  <EyeIcon className="h-5 w-5" />
                 </button>
-                <button onClick={() => onEdit(row)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1" aria-label="Edit">
-                  <PencilSquareIcon className="h-4 w-4" />
+                <button onClick={() => onEdit(row)} className="text-cyan-900 hover:text-cyan-700 font-bold py-2 px-4 rounded m-1" aria-label="Edit">
+                  <PencilSquareIcon className="h-5 w-5" />
                 </button>
-                <button onClick={() => onDelete(row)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1" aria-label="Delete">
-                  <TrashIcon className="h-4 w-4" />
+                <button onClick={() => onDelete(row)} className="text-cyan-900 hover:text-cyan-700 font-bold py-2 px-4 rounded m-1" aria-label="Delete">
+                  <TrashIcon className="h-5 w-5" />
                 </button>
               </td>
             </tr>

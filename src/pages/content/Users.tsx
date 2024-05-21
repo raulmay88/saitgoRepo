@@ -17,7 +17,7 @@ export default function Users() {
   return (
     <div className="flex flex-col items-center">
       <div className="flex items-baseline space-x-10 m-5">
-        <Tittle texto="Menú de usuarios"/>
+        <Tittle texto="Usuarios"/>
         <ButtonAdd onClick={() => setIsModalOpen(true)}>Agregar</ButtonAdd>
       </div>
       <div>

@@ -30,14 +30,14 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex justify-between items-center mt-4">
-      <span className="bg-cyan-900 rounded-xl text-white font-semibold py-2 px-4 m-2">
+      <span className=" rounded-xl text-cyan-900 font-semibold py-2 px-4 m-2">
         {`Mostrando ${Math.min((currentPage - 1) * rowsPerPage + 1, totalRecords)} - ${Math.min(currentPage * rowsPerPage, totalRecords)} de ${totalRecords}`}
       </span>
-      <div className="flex items-center text-white font-semibold bg-cyan-900 rounded-xl m-2">
+      <div className="flex items-center font-semibold  rounded-xl m-2">
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
-          className="py-2 px-4 disabled:opacity-50 hover:opacity-100"
+          className="py-2 px-4 disabled:opacity-50 hover:opacity-100 hover:text-cyan-900"
           aria-label="Página anterior"
         >
           Anterior
@@ -46,7 +46,7 @@ const Pagination: React.FC<PaginationProps> = ({
           <button
             key={page}
             onClick={() => handlePageClick(page)}
-            className={`px-4 py-2 ${currentPage === page ? 'bg-cyan-700 text-white' : 'text-white hover:bg-cyan-700'}`}
+            className={`px-4 py-2 ${currentPage === page ? ' text-cyan-800 hover:text-cyan-950' : 'text-cyan-600 hover:text-cyan-950'}`}
             aria-label={`Ir a la página ${page}`}
           >
             {page}
@@ -55,7 +55,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="py-2 px-4 disabled:opacity-50 hover:opacity-100"
+          className="py-2 px-4 disabled:opacity-50 hover:opacity-100 hover:text-cyan-900"
           aria-label="Página siguiente"
         >
           Siguiente

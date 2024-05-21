@@ -34,9 +34,11 @@ const Sidebar: React.FC = () => {
     <>
       <div className={`flex flex-col h-screen fixed shadow-xl bg-cyan-950 ${sidebarVisible ? 'w-44' : 'w-16'}`}>
         <div className="flex justify-center text-center mx-auto m-5">
-            <h1 className="text-xl font-bold text-cyan-600">
-              Sait<span className="text-white opacity-90">Go</span>
-            </h1>
+            <img 
+                src="../../public/saigo.png" 
+                alt="logo" 
+                className='h-11'
+            />
         </div>
         <hr className="mt-8" />
         <nav className="mt-4 flex-1 bg-top bg-cover space-y-1">
