@@ -14,4 +14,5 @@ export interface TableProps {
   data: RowData[];
   onEdit: (rowData: RowData) => void;
   onDelete: (rowData: RowData) => void;
+  onView: (rowData: RowData) => void;
 }

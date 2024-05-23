@@ -57,7 +57,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="bg-cyan-950 rounded-xl shadow-2xl p-8 max-w-md mx-auto">
+    <div className="bg-cyan-950 rounded shadow-2xl p-8 max-w-md mx-auto">
       <div className="text-4xl font-bold mb-4 text-white text-center">
         Registrar usuario
       </div>
@@ -111,7 +111,9 @@ const Register: React.FC = () => {
               )}
             </div>
           </div>
-          <RoleSelect selectedRoleId={formData.roleId} onRoleChange={handleRoleChange} />
+          <div className="relative">
+            <RoleSelect selectedRoleId={formData.roleId} onRoleChange={handleRoleChange} />
+          </div>
         </div>
         <div className="mt-4">
           <button

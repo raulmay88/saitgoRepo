@@ -17,11 +17,6 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   return (
     <LoadingContext.Provider value={{ isLoading, setLoading }}>
       {children}
-      {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="loader">Loading...</div>
-        </div>
-      )}
     </LoadingContext.Provider>
   );
 };

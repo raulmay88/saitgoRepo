@@ -1,48 +1,53 @@
-import Table from "../../TableIndex";
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useCallback } from 'react';
+import Table from "../../../components/TableIndex";
 import { getRoles } from "../../../services/rol/RolService";
-import { useEffect, useState } from 'react';
-    
+import ConfirmationModal from "../../../components/Modal";
+import { useRoleHandlers } from '../../../handlers/rolHandlers';
 
 const Index: React.FC = () => {
-
-  const navigate = useNavigate();
   const [roles, setRoles] = useState<any[]>([]);
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const rolesData = await getRoles();
-        setRoles(rolesData);
-      } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-      }
+  const fetchRoles = useCallback(async () => {
+    try {
+      const rolesData = await getRoles();
+      setRoles(rolesData);
+    } catch (error) {
+      console.error('Error al obtener roles: ', error);
     }
-
-    fetchUsers();
   }, []);
 
-  const handleEdit = (rowData: any) => {
-    navigate('/content/index');
-    console.log(rowData)
-  };
+  useEffect(() => {
+    fetchRoles();
+  }, [fetchRoles]);
 
-  const handleDelete = (rowData: any) => {
-    navigate('/content/index');
-    console.log(rowData)
-  };
+  const {
+    handleEdit,
+    handleDeleteClick,
+    handleDeleteConfirm,
+    handleDeleteCancel,
+    handleView,
+    showModal,
+    roleToDelete,
+  } = useRoleHandlers(fetchRoles);
 
   const columns = [
     { header: 'ID', accessor: 'id' },
     { header: 'Nombre', accessor: 'name' },
     { header: 'Fecha de alta', accessor: 'createdDate', isDate: true },
-  ]; 
-  
-return (
+  ];
+
+  return (
     <div className="container mx-auto">
-    <Table columns={columns} data={roles} onEdit={handleEdit} onDelete={handleDelete} />
+      <Table columns={columns} data={roles} onEdit={handleEdit} onDelete={handleDeleteClick} onView={handleView} />
+      <ConfirmationModal
+        isOpen={showModal}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="Confirmación de eliminación"
+        message={`¿Estás seguro de que deseas eliminar el rol "${roleToDelete?.name}"?`}
+      />
     </div>
-);
+  );
 };
 
 export default Index;

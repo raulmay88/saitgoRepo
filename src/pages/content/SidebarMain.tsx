@@ -1,4 +1,4 @@
-import Sidebar from "../../components/SideBar"
+import Sidebar from "../../components/Sidebar/Sidebar"
 
 export default function SaidbarMain(){
     return(

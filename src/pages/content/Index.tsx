@@ -1,11 +1,13 @@
-import Dashboard from "../../components/Content/Dashboard"
+import Dashboard from "../../components/Content/Dashboard";
 
-export default function Index(){
-    return(
+const Index: React.FC = () => {
+    return (
         <div className="w-full">
-                <div className="flex flex-wrap items-center justify-center h-screen md:mx-5 ">
-                    <Dashboard/>
-                </div>
+            <div className="flex flex-wrap items-center justify-center md:mx-5">
+                <Dashboard />
+            </div>
         </div>
-    )
+    );
 }
+
+export default Index;

@@ -1,4 +1,4 @@
-import { Dialog } from '@headlessui/react'
+import { Dialog } from '@headlessui/react';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -8,7 +8,7 @@ interface ConfirmationModalProps {
   message: string;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
+const Modal: React.FC<ConfirmationModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
@@ -58,7 +58,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         </div>
       </div>
     </Dialog>
-  )
-}
+  );
+};
 
-export default ConfirmationModal
+export default Modal;

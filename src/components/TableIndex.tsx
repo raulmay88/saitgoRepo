@@ -6,12 +6,12 @@ import { TableProps } from '../types/TableTypes';
 import usePagination from '../hooks/usePagination';
 import Pagination from './Pagination';
 
-const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
+const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete, onView }) => {
   const rowsPerPage = 10;
   const { currentPage, totalPages, currentRows, handlePageChange, handleNextPage, handlePreviousPage } = usePagination(data, rowsPerPage);
 
   return (
-    <div className="overflow-x-auto shadow-xl rounded-2xl m-4">
+    <div className="overflow-x-auto shadow-xl rounded m-4">
       <table className="w-full text-center text-gray-500">
         <thead className="font-bold bg-cyan-800 text-xs uppercase text-white tracking-wider">
           <tr>
@@ -41,6 +41,7 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
                 <button
                   className="text-cyan-900 hover:text-cyan-700 font-bold py-2 px-4 rounded m-1"
                   aria-label="View"
+                  onClick={() => onView(row)} // Añadir onClick para el botón de vista
                 >
                   <EyeIcon className="h-5 w-5" />
                 </button>

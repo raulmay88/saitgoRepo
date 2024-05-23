@@ -6,10 +6,11 @@ import ProtectedRoute from '../auth/protectedRoute';
 import Index from "../pages/content/Index";
 import Users from '../pages/content/Users';
 import RegisterMain from '../pages/auth/RegisterMain';
-import Profiles from '../pages/content/Profiles';
 import Actions from '../pages/content/Actions';
 import Roles from '../pages/content/roles/Index';
-import RegisterRol from '../pages/content/roles/Register';
+import CreateRoles from '../pages/content/roles/Create';
+import EditRoles from '../pages/content/roles/Edit';
+import DetailRoles from '../pages/content/roles/Detail';
 import Companies from '../pages/content/Companies';
 import InfoCompanies from '../pages/content/InfoCompanies';
 import ErrorPage from '../pages/ErrorPage';
@@ -22,10 +23,11 @@ const Router: React.FC = () => {
         <Route path="index" element={<Index />} />
         <Route path="users" element={<Users />} />
         <Route path="users/register" element={<RegisterMain />} />
-        <Route path="profiles" element={<Profiles />} />
-        <Route path="actions" element={<Actions />} />
         <Route path="roles" element={<Roles />} />
-        <Route path="roles/create" element={<RegisterRol />} />
+        <Route path="roles/create" element={<CreateRoles />} />
+        <Route path="roles/edit/:roleId" element={<EditRoles />} />
+        <Route path="roles/detail/:roleId" element={<DetailRoles />} />
+        <Route path="actions" element={<Actions />} />
         <Route path="companies" element={<Companies />} />
         <Route path="companies/detail/:companyId" element={<InfoCompanies />} />
       </Route>

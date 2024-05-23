@@ -5,12 +5,20 @@ import ButtonAdd from "../../components/ButtonAdd";
 import ConfirmationModal from "../../components/Modal";
 import Tittle from "../../components/Tittle";
 
-export default function Users() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const Users: React.FC = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate(); 
 
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   const handleConfirmAction = () => {
-    setIsModalOpen(false);
+    setModalOpen(false);
     navigate("/content/users/register");
   };
 
@@ -18,18 +26,20 @@ export default function Users() {
     <div className="flex flex-col items-center">
       <div className="flex items-baseline space-x-10 m-5">
         <Tittle texto="Usuarios"/>
-        <ButtonAdd onClick={() => setIsModalOpen(true)}>Agregar</ButtonAdd>
+        <ButtonAdd onClick={handleOpenModal}>Agregar</ButtonAdd>
       </div>
       <div>
-        <Index/>
+        <Index />
       </div>
-        <ConfirmationModal
+      <ConfirmationModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
         onConfirm={handleConfirmAction}
         title="Confirmación"
         message="¿Estás seguro de crear un nuevo usuario?"
-        />
+      />
     </div>
   );
-}
+};
+
+export default Users;
