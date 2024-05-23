@@ -1,5 +1,3 @@
-//Modal.tsx
-
 import { Dialog } from '@headlessui/react'
 
 interface ConfirmationModalProps {
