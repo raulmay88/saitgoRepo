@@ -1,4 +1,4 @@
-import Register from '../../components/Register/Index'
+import Register from '../../../components/Register/Index'
 
 export default function RegisterMain() {
 

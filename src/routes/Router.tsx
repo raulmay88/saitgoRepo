@@ -4,8 +4,9 @@ import LoginMain from '../pages/auth/LoginMain';
 import Layout from '../layouts/Layout';
 import ProtectedRoute from '../auth/protectedRoute';
 import Index from "../pages/content/Index";
-import Users from '../pages/content/Users';
-import RegisterMain from '../pages/auth/RegisterMain';
+import Users from '../pages/content/users/Index';
+import CreateUser from '../pages/content/users/Create';
+import DetailUser from '../pages/content/users/Detail';
 import Actions from '../pages/content/Actions';
 import Roles from '../pages/content/roles/Index';
 import CreateRoles from '../pages/content/roles/Create';
@@ -22,7 +23,8 @@ const Router: React.FC = () => {
       <Route path="/content" element={<ProtectedRoute element={<Layout />} />}>
         <Route path="index" element={<Index />} />
         <Route path="users" element={<Users />} />
-        <Route path="users/register" element={<RegisterMain />} />
+        <Route path="users/create" element={<CreateUser />} />
+        <Route path="users/detail/:userId" element={<DetailUser />} />
         <Route path="roles" element={<Roles />} />
         <Route path="roles/create" element={<CreateRoles />} />
         <Route path="roles/edit/:roleId" element={<EditRoles />} />

@@ -1,18 +1,23 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
 import Table from '../TableIndex';
 import { getUsers } from '../../services/user/authService';
+import { useUserHandlers } from '../../handlers/userHandlers';
 import { useLoading } from '../../context/LoadingContext';
+import { User } from '../../types/UserTypes';
 
-const Index: React.FC = () => {
-  const navigate = useNavigate();
-  const [users, setUsers] = useState<any[]>([]);
+interface IndexProps {
+  onAdd: () => void;
+}
+
+const Index: React.FC<IndexProps> = ({ onAdd }) => {
+  const [users, setUsers] = useState<User[]>([]);
   const { setLoading } = useLoading();
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const usersData = await getUsers();
+      console.log(usersData)
       setUsers(usersData);
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
@@ -25,20 +30,12 @@ const Index: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const handleEdit = (rowData: any) => {
-    navigate('/content/index');
-    console.log('Edit:', rowData);
-  };
-
-  const handleDelete = (rowData: any) => {
-    navigate('/content/index');
-    console.log('Delete:', rowData);
-  };
+  const { handleView } = useUserHandlers(fetchUsers);
 
   const columns = [
     { header: 'ID', accessor: 'id' },
     { header: 'Nombre', accessor: 'name' },
-    { header: 'Correo', accessor: 'email' }, 
+    { header: 'Correo', accessor: 'email' },
     { header: 'Status', accessor: 'status', isSwitch: true },
     { header: 'Id Rol', accessor: 'roleId' },
     { header: 'Rol', accessor: 'roleName' },
@@ -46,8 +43,16 @@ const Index: React.FC = () => {
   ];
 
   return (
-    <div className="container mx-auto">
-      <Table columns={columns} data={users} onEdit={handleEdit} onDelete={handleDelete} />
+    <div className="w-full px-10">
+      <Table 
+        title='Usuarios'
+        columns={columns} 
+        data={users} 
+        onEdit={() => {}} 
+        onDelete={() => {}} 
+        onView={handleView} 
+        onAdd={onAdd} 
+      />
     </div>
   );
 };

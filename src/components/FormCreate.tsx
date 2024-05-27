@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Role } from '../types/RolTypes';
 
 interface FormProps {
@@ -10,6 +10,7 @@ const FormCreate: React.FC<FormProps> = ({ initialData, onSubmit }) => {
   const [formData, setFormData] = useState<Role>({
     id: initialData?.id || 0, 
     name: initialData?.name || '',
+    createdDate: initialData?.createdDate || '',
   });
 
   useEffect(() => {

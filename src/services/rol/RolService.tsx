@@ -1,7 +1,7 @@
 import axios from 'axios';
 import clienteAxios from '../httpClient';
 import { Role } from '../../types/RolTypes';
-import { validateRole } from '../../validations/validationForm';
+import { validateRole } from '../../validations/rolValidation';
 
 // Obtener roles
 export async function getRoles(): Promise<Role[]> {

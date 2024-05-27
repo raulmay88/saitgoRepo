@@ -16,7 +16,7 @@ type SidebarOption = 'dashboard' | 'personal' | 'company' | 'users' | 'roles' | 
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
-  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState<SidebarOption>('dashboard');
   const [dashboardMenuOpen, setDashboardMenuOpen] = useState(false);
 
@@ -41,12 +41,19 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      <div className={`flex flex-col h-screen fixed shadow-xl bg-cyan-950 transition-width duration-300 ${sidebarVisible ? 'w-44' : 'w-16'}`}>
-        <div className="flex justify-center text-center mx-auto h-16">
-          <img src="/saigo.png" alt="logo" className='h-11' />
+      <div className={`flex flex-col h-screen shadow-xl fixed bg-cyan-950 transition-all duration-300 ease-in-out ${sidebarVisible ? 'w-44 ' : 'w-16'}`}>
+        <div className="flex justify-center items-center mt-6">
+          <img
+            src="/saitgoIconoBlanco.svg"
+            alt="logo"
+            className={`h-12 transition-all duration-300 ease-in-out ${sidebarVisible ? '' : 'ml-14'}`}
+          />
+          <span className={`text-white text-lg font-bold transition-all duration-300 ease-in-out ${sidebarVisible ? 'opacity-100' : 'opacity-0'}`}>
+            Saitgo
+          </span>
         </div>
-        <hr className="mt-8" />
-        <nav className="mt-4 flex-1 bg-top bg-cover space-y-1">
+        <hr className="mt-2 border-gray-700" />
+        <nav className="mt-4 flex-1 mx-auto bg-top bg-cover space-y-1">
           <SidebarLink
             to="/content/index"
             icon={<HomeIcon className="h-6 w-6 text-white" />}
@@ -64,7 +71,7 @@ const Sidebar: React.FC = () => {
             onClick={toggleDashboardMenu}
           />
           {dashboardMenuOpen && (
-            <div className="p-2 transition duration-300 ease-in-out">
+            <div className={`p-2 transition-all duration-300 ease-in-out ${sidebarVisible ? 'w-44' : 'w-16'}`}>
               <SidebarLink
                 to="/content/users"
                 icon={<UserPlusIcon className="h-6 w-6 text-white" />}
