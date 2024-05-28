@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { UserCircleIcon, BellIcon, ExclamationCircleIcon } from "@heroicons/react/24/solid";
 import InfoUser from "./InfoUser";
 import ConfirmationModal from "../../Modal";
@@ -12,11 +12,24 @@ const MenuUser: React.FC = () => {
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const [userCompany, setUserCompany] = useState<string | null>(null);
     const [userBranch, setUserBranch] = useState<string | null>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setUserEmail(localStorage.getItem('username'));
         setUserCompany(localStorage.getItem('selectedCompany'));
         setUserBranch(localStorage.getItem('selectedBranch'));
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setShowUserInfo(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
     }, []);
 
     const handleLogout = () => {
@@ -34,7 +47,7 @@ const MenuUser: React.FC = () => {
 
     return (
         <>
-            <div className="relative">
+            <div className="relative" ref={menuRef}>
                 <div className="flex space-x-8 text-white">
                     <ExclamationCircleIcon className="cursor-pointer h-8 w-8" />
                     <BellIcon className="cursor-pointer h-8 w-8" />

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import SidebarLink from './SidebarLink';
 import SidebarButton from './SidebarButton';
@@ -19,12 +19,25 @@ const Sidebar: React.FC = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState<SidebarOption>('dashboard');
   const [dashboardMenuOpen, setDashboardMenuOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const path = location.pathname.split('/')[2];
     if (path) {
       setSelectedOption(path as SidebarOption);
     }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setSidebarVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [location.pathname]);
 
   const toggleSidebar = () => {
@@ -41,7 +54,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      <div className={`flex flex-col h-screen shadow-xl fixed bg-cyan-950 transition-all duration-300 ease-in-out ${sidebarVisible ? 'w-44 ' : 'w-16'}`}>
+      <div className={`flex flex-col h-screen shadow-xl fixed bg-cyan-950 transition-all duration-300 ease-in-out ${sidebarVisible ? 'w-44 ' : 'w-16'}`} ref={sidebarRef}>
         <div className="flex justify-center items-center mt-6">
           <img
             src="/saitgoIconoBlanco.svg"

@@ -9,19 +9,48 @@ import Search from './Search';
 import ButtonAdd from './ButtonAdd';
 import FilterModal from './FilterModal';
 
+interface FilterCriteria {
+  column: string;
+  operator: string;
+  value: string | number;
+}
+
 const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, onView, onAdd }) => {
   const [filteredData, setFilteredData] = useState(data);
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'ascending' | 'descending' } | null>(null);
   const [isFilterModalOpen, setFilterModalOpen] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState(columns.map(col => col.accessor));
+  const [filters, setFilters] = useState<FilterCriteria[]>([]);
 
   useEffect(() => {
     setFilteredData(data);
   }, [data]);
 
   useEffect(() => {
+    let filtered = data;
+
+    filters.forEach((filter) => {
+      filtered = filtered.filter((row) => {
+        const rowValue = row[filter.column];
+        const filterValue = filter.value;
+
+        switch (filter.operator) {
+          case '=':
+            return rowValue == filterValue;
+          case '>':
+            return rowValue > filterValue;
+          case '<':
+            return rowValue < filterValue;
+          case 'texto':
+            return String(rowValue).includes(String(filterValue));
+          default:
+            return true;
+        }
+      });
+    });
+
     if (sortConfig !== null) {
-      const sortedData = [...filteredData].sort((a, b) => {
+      filtered = [...filtered].sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
           return sortConfig.direction === 'ascending' ? -1 : 1;
         }
@@ -30,9 +59,10 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
         }
         return 0;
       });
-      setFilteredData(sortedData);
     }
-  }, [sortConfig]);
+
+    setFilteredData(filtered);
+  }, [data, filters, sortConfig]);
 
   const rowsPerPage = 10;
   const { currentPage, totalPages, currentRows, handlePageChange, handleNextPage, handlePreviousPage } = usePagination(filteredData, rowsPerPage);
@@ -59,8 +89,8 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
     setFilterModalOpen(true);
   };
 
-  const handleApplyFilter = (selectedColumns: string[]) => {
-    setSelectedColumns(selectedColumns);
+  const handleApplyFilter = (newFilters: FilterCriteria[]) => {
+    setFilters(newFilters);
   };
 
   return (
@@ -81,16 +111,16 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
         <ButtonAdd onClick={onAdd}>Agregar</ButtonAdd>
       </div>
       <div className="block w-full">
-        <table className=" w-full text-center text-gray-500 table-auto">
+        <table className="w-full text-center text-gray-500 table-auto">
           <thead className="font-bold bg-cyan-800 text-xs uppercase text-white tracking-wider">
             <tr>
               {columns.filter(col => selectedColumns.includes(col.accessor)).map((column, index) => (
                 <th
                   key={index}
-                  className="px-6 py-3 cursor-pointer"
+                  className="cursor-pointer px-2 py-1"
                   onClick={() => handleSort(column.accessor)}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-center space-x-1">
                     <span>{column.header}</span>
                     <ArrowDownIcon className={`h-4 w-4 transition-transform duration-300 ${sortConfig && sortConfig.key === column.accessor ? (sortConfig.direction === 'ascending' ? 'rotate-0' : 'rotate-180') : ''}`} />
                   </div>
@@ -103,7 +133,7 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
             {currentRows.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {columns.filter(col => selectedColumns.includes(col.accessor)).map((column, colIndex) => (
-                  <td key={colIndex} className="px-6 py-4 whitespace-nowrap">
+                  <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-center">
                     {column.isSwitch ? (
                       <SwitchStatus initialValue={row[column.accessor]} />
                     ) : column.isDate ? (
@@ -113,7 +143,7 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
                     )}
                   </td>
                 ))}
-                <td>
+                <td className="flex justify-center space-x-2 py-4">
                   <button
                     className="text-cyan-900 hover:text-cyan-700 font-bold py-2 px-4 rounded m-1"
                     aria-label="View"
