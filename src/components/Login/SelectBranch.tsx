@@ -16,10 +16,10 @@ const SelectBranch: React.FC<BranchSelectProps> = ({ selectedBranch, branches, s
   };
 
   return (
-    <div className="mt-4">
+    <div className="">
       <Listbox value={selectedBranch} onChange={handleBranchSelectChange}>
         <Listbox.Button className="w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-md">
-          {selectedBranch ? selectedBranch.name : 'Selecciona una sucursal'}
+          {selectedBranch ? selectedBranch.name : 'Seleccione una sucursal'}
         </Listbox.Button>
         <Listbox.Options className="absolute z-10 mt-1 w-2/3 bg-white shadow-lg max-h-60 rounded-md py-1 text-md ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-md">
           {branches.map(branch => (

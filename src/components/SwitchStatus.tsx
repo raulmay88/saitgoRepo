@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Switch } from "@headlessui/react";
 
 interface SwitchStatusProps {
@@ -8,6 +8,10 @@ interface SwitchStatusProps {
 
 const SwitchStatus: React.FC<SwitchStatusProps> = ({ initialValue = false, onChange }) => {
   const [enabled, setEnabled] = useState(initialValue);
+
+  useEffect(() => {
+    setEnabled(initialValue);
+  }, [initialValue]);
 
   const handleToggle = () => {
     const newValue = !enabled;

@@ -29,10 +29,10 @@ const DetailUser: React.FC = () => {
 
   return (
     user && (
-        <div className="container rounded mx-auto p-4 bg-cyan-950 text-white">
-            <table className="min-w-full">
+        <div className=" rounded mx-auto p-4 bg-cyan-950 text-white">
+            <table className="min-w-full  ">
             <h1 className="text-2xl font-bold mb-4">Detalles del Usuario</h1>
-                <tbody>
+                <tbody className='uppercase'>
                     <tr>
                         <td className="px-6 py-4 border-b border-gray-200">ID</td>
                         <td className="px-6 py-4 border-b border-gray-200">{user.id}</td>

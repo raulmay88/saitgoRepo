@@ -4,9 +4,14 @@ import { getRoles } from "../../../services/rol/RolService";
 import ConfirmationModal from "../../../components/Modal";
 import { useRoleHandlers } from '../../../handlers/rolHandlers';
 import { useLoading } from '../../../context/LoadingContext';
+import { Role } from '../../../types/RolTypes';
 
-const Index: React.FC = () => {
-  const [roles, setRoles] = useState<any[]>([]);
+interface IndexProps {
+  onAdd: () => void;
+}
+
+const Index: React.FC<IndexProps>= ({onAdd}) => {
+  const [roles, setRoles] = useState<Role[]>([]);
   const { setLoading } = useLoading();
 
   const fetchRoles = useCallback(async () => {
@@ -43,7 +48,15 @@ const Index: React.FC = () => {
 
   return (
     <div className="container mx-auto">
-      <Table title='roles' columns={columns} data={roles} onEdit={handleEdit} onDelete={handleDeleteClick} onView={handleView} />
+      <Table 
+        title='Roles' 
+        columns={columns} 
+        data={roles} 
+        onEdit={handleEdit} 
+        onDelete={handleDeleteClick} 
+        onView={handleView} 
+        onAdd={onAdd}
+      />
       <ConfirmationModal
         isOpen={showModal}
         onClose={handleDeleteCancel}

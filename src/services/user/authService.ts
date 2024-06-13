@@ -1,6 +1,6 @@
 import clienteAxios from "../httpClient";
-import { LoginResponse, User, RegisterFormData, RegisterResponse } from "../../types/UserTypes";
-import { validateUser, handleError } from '../../validations/userValidation';
+import { LoginResponse, User, RegisterFormData, RegisterResponse, TokenResponse } from "../../types/UserTypes";
+import { validateUser, handleError, handleGenericError } from '../../validations/userValidation';
 
 const TOKEN_KEY = 'token';
 const USERNAME_KEY = 'username';
@@ -36,6 +36,7 @@ export async function getUsers(): Promise<User[]> {
   try {
     const response = await clienteAxios.get<{ result: User[] }>('/users');
     if (response.status === 200) {
+      console.log(response.data.result)
       return response.data.result;
     } else {
       console.error('Error al obtener usuarios:', response.statusText);
@@ -95,6 +96,35 @@ export async function register(formData: RegisterFormData): Promise<RegisterResp
     const errorMessage = handleError(error);
     console.error('Error al registrar usuario:', errorMessage);
     return { success: false, message: errorMessage };
+  }
+}
+
+
+export async function confirmEmail(token: string, email: string): Promise<TokenResponse> {
+  try {
+    const response = await clienteAxios.get<TokenResponse>(`/users/confirm-email`, {
+      params: { token, email },
+    });
+    return response.data;
+  } catch (error) {
+    const errorMessages = handleGenericError(error);
+    return {
+      isSuccess: false,
+      result: '',
+      errorMessages: errorMessages
+    };
+  }
+}
+
+
+export async function updateUserStatus(userId: number, status: boolean): Promise<void> {
+  try {
+    const response = await clienteAxios.patch(`/users/${userId}/status`, { status });
+    if (response.status !== 200) {
+      console.error('Error al actualizar el estado del usuario:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error al actualizar el estado del usuario:', handleError(error));
   }
 }
 

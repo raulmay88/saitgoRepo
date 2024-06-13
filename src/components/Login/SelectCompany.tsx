@@ -23,10 +23,10 @@ const SelectCompany: React.FC<CompanySelectProps> = ({ selectedCompany, setSelec
   };
 
   return (
-    <div className="mt-4">
+    <div className="">
       <Listbox value={selectedCompany} onChange={handleCompanySelectChange}>
         <Listbox.Button className="w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-md">
-          {selectedCompany ? selectedCompany.name : 'Selecciona una empresa'}
+          {selectedCompany ? selectedCompany.name : 'Seleccione una empresa'}
         </Listbox.Button>
         <Listbox.Options className="absolute z-10 mt-1 w-2/3 bg-white shadow-lg max-h-60 rounded-md py-1 text-md ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-md">
           {companies.map(company => (

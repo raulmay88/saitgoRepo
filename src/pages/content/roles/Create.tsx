@@ -1,6 +1,5 @@
 import React from 'react';
 import FormCreate from '../../../components/FormCreate';
-import Tittle from '../../../components/Tittle';
 import { useRoleFormHandlers } from '../../../handlers/rolHandlers';
 
 const CreateRoles: React.FC = () => {
@@ -8,7 +7,6 @@ const CreateRoles: React.FC = () => {
 
   return (
     <div className='flex flex-1 flex-col space-y-10 items-center justify-center'>
-      <Tittle texto="Registrar nuevo rol" />
       <FormCreate onSubmit={handleSubmit} />
     </div>
   );

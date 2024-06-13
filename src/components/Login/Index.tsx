@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import { login } from "../../services/user/authService";
 import { useNavigate } from 'react-router-dom';
 import CompanySelect from './SelectCompany';
@@ -7,6 +7,7 @@ import { Company, Branch } from "../../types/UserTypes";
 import { toast } from 'react-toastify';
 import { useLoading } from "../../context/LoadingContext";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import saitgoIcon from '../../../public/saitgoNegativo.png'; 
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -31,30 +32,48 @@ const Login: React.FC = () => {
       return;
     }
 
-    setLoading(true); 
+    setLoading(true);
 
     try {
       const success = await login(username, password);
       if (success) {
         setLoginState(prevState => ({ ...prevState, isLoggedIn: true }));
+        toast.success('Inicio de sesión exitoso. Seleccione una empresa y una sucursal.');
       } else {
         toast.error('Credenciales inválidas');
       }
     } catch (error) {
       toast.error('Error al iniciar sesión: ' + (error instanceof Error ? error.message : 'Error desconocido'));
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
+  };
+
+  const handleContinue = () => {
+    if (!loginState.isLoggedIn) {
+      toast.error("Por favor, inicie sesión primero.");
+      return;
+    }
+
+    if (!loginState.selectedCompany) {
+      toast.error("Por favor, seleccione una empresa.");
+      return;
+    }
+
+    if (!loginState.selectedBranch) {
+      toast.error("Por favor, seleccione una sucursal.");
+      return;
+    }
+
+    navigate('/content/index');
   };
 
   return (
     <div className="bg-cyan-950 rounded-xl shadow-2xl">
-      <div className="max-w-2xl relative flex flex-col p-20 rounded-md text-black">
-        <div className="text-4xl font-bold mb-4 text-white text-center">
-          Bienvenido a SaitGo
-        </div>
+      <div className="max-w-2xl relative flex flex-col p-10 xl:px-20 rounded-md">
+        <img src={saitgoIcon} alt="SaitGo Icon" className="mx-auto w-44 h-44 object-contain" />
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="flex flex-col text-white space-y-4 my-2">
+          <div className="flex flex-col text-white space-y-4 ">
             <label htmlFor="email" className="cursor-text text-xl font-normal">
               Email
             </label>
@@ -90,34 +109,42 @@ const Login: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           {loginState.isLoggedIn && (
-            <CompanySelect 
-              selectedCompany={loginState.selectedCompany} 
-              setSelectedCompany={(company) => setLoginState(prevState => ({
-                ...prevState,
-                selectedCompany: company,
-                selectedBranch: null,
-              }))}
-            />
+            <>
+              <label htmlFor="company" className="cursor-text text-xl font-normal text-white">
+                Seleccione una empresa y una sucursal
+              </label>
+              <CompanySelect 
+                selectedCompany={loginState.selectedCompany} 
+                setSelectedCompany={(company) => setLoginState(prevState => ({
+                  ...prevState,
+                  selectedCompany: company,
+                  selectedBranch: null,
+                }))}
+              />
+              
+              {loginState.selectedCompany && (
+                <BranchSelect 
+                  selectedBranch={loginState.selectedBranch} 
+                  branches={loginState.selectedCompany.branches}
+                  setSelectedBranch={(branch) => setLoginState(prevState => ({
+                    ...prevState,
+                    selectedBranch: branch,
+                  }))}
+                />
+              )}
+            </>
           )}
-          
-          {loginState.isLoggedIn && loginState.selectedCompany && (
-            <BranchSelect 
-              selectedBranch={loginState.selectedBranch} 
-              branches={loginState.selectedCompany.branches}
-              setSelectedBranch={(branch) => {
-                setLoginState(prevState => ({ ...prevState, selectedBranch: branch }));
-                navigate('/content/index');
-              }}
-            />
-          )}
+
           <button 
-            type="submit" 
-            className="bg-cyan-700 hover:bg-cyan-800 w-max m-auto px-8 py-2 rounded-xl text-white text-xl font-normal"
+            type="button" 
+            className="bg-cyan-700 hover:bg-cyan-800 w-max m-auto px-8 py-2 rounded-xl text-white text-xl font-normal mt-4"
+            onClick={!loginState.isLoggedIn ? handleSubmit : handleContinue}
           >
-            Continuar
+            {!loginState.isLoggedIn ? "Iniciar sesión" : "Continuar"}
           </button>
+
           {error && <div className="text-red-500 mt-2">{error}</div>}
         </form>
       </div>

@@ -36,3 +36,9 @@ export interface RegisterResponse {
   success: boolean;
   message?: string;
 }
+
+export interface TokenResponse {
+  isSuccess: boolean;
+  result: string;
+  errorMessages?: string[];
+}

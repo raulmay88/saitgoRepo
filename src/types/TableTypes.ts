@@ -1,3 +1,4 @@
+// types/TableTypes.ts
 export interface Column {
   header: string;
   accessor: string;
@@ -17,4 +18,5 @@ export interface TableProps {
   onDelete: (rowData: RowData) => void;
   onView: (rowData: RowData) => void;
   onAdd: () => void;
+  onStatusChange: (userId: number, status: boolean) => void;
 }

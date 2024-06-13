@@ -10,7 +10,7 @@ const Layout: React.FC = () => {
             </aside>
             <div className="flex flex-col w-full h-full">
                 <Header />
-                <main className="flex-grow p-5">
+                <main className="flex-grow">
                     <Outlet />
                 </main>
             </div>

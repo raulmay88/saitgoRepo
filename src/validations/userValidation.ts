@@ -51,3 +51,25 @@ export const handleError = (error: unknown): string => {
   }
   return errorMessage;
 };
+
+
+export const handleGenericError = (error: unknown): string[] => {
+  let errorMessages: string[] = ['Error desconocido'];
+
+  if (axios.isAxiosError(error)) {
+    if (error.code === 'ECONNABORTED') {
+      errorMessages = ['La solicitud tardó demasiado tiempo, por favor intenta nuevamente.'];
+    } else if (error.response) {
+      if (error.response.data && error.response.data.errorMessages) {
+        errorMessages = error.response.data.errorMessages;
+      } else {
+        errorMessages = [error.response.data.message || error.response.statusText];
+      }
+    } else {
+      errorMessages = [error.message];
+    }
+  } else if (error instanceof Error) {
+    errorMessages = [error.message];
+  }
+  return errorMessages;
+};

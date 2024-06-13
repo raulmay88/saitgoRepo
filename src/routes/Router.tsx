@@ -14,6 +14,7 @@ import EditRoles from '../pages/content/roles/Edit';
 import DetailRoles from '../pages/content/roles/Detail';
 import Companies from '../pages/content/Companies';
 import InfoCompanies from '../pages/content/InfoCompanies';
+import ConfirmEmail from '../components/ConfirmEmail';
 import ErrorPage from '../pages/ErrorPage';
 
 const Router: React.FC = () => {
@@ -33,6 +34,7 @@ const Router: React.FC = () => {
         <Route path="companies" element={<Companies />} />
         <Route path="companies/detail/:companyId" element={<InfoCompanies />} />
       </Route>
+      <Route path="/confirm-email" element={<ConfirmEmail />} /> 
       <Route path="*" element={<ErrorPage />} /> 
     </Routes>
   );

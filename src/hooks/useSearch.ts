@@ -1,7 +1,13 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Column } from '../types/TableTypes';
 
-const useSearch = (data: any[], columns: Column[]) => {
+interface FilterCriteria {
+  column: string;
+  operator: string;
+  value: string | number;
+}
+
+const useSearch = (data: any[], columns: Column[], filters: FilterCriteria[]) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = useCallback((term: string) => {
@@ -9,14 +15,36 @@ const useSearch = (data: any[], columns: Column[]) => {
   }, []);
 
   const filteredData = useMemo(() => {
-    if (!searchTerm) return data;
+    let filtered = data;
 
-    return data.filter(row => 
+    filters.forEach((filter) => {
+      filtered = filtered.filter((row) => {
+        const rowValue = row[filter.column];
+        const filterValue = filter.value;
+
+        switch (filter.operator) {
+          case '=':
+            return rowValue == filterValue;
+          case '>':
+            return rowValue > filterValue;
+          case '<':
+            return rowValue < filterValue;
+          case 'texto':
+            return String(rowValue).includes(String(filterValue));
+          default:
+            return true;
+        }
+      });
+    });
+
+    if (!searchTerm) return filtered;
+
+    return filtered.filter(row => 
       columns.some(column => 
         String(row[column.accessor]).toLowerCase().includes(searchTerm)
       )
     );
-  }, [data, columns, searchTerm]);
+  }, [data, columns, searchTerm, filters]);
 
   return { filteredData, handleSearch };
 };

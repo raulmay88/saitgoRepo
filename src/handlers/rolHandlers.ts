@@ -4,8 +4,6 @@ import { toast } from 'react-toastify';
 import { Role } from '../types/RolTypes';
 import { deleteRole, getRoleById, registerRole, updateRole } from '../services/rol/RolService'; 
 
-
-//Manejo de eliminación de roles
 export const useRoleHandlers = (fetchRoles: () => void) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -30,7 +28,7 @@ export const useRoleHandlers = (fetchRoles: () => void) => {
         const response = await deleteRole(roleToDelete.id);
         if (response.success) {
           toast.success(response.message || '¡Rol eliminado exitosamente!');
-          fetchRoles(); // Actualizar la lista de roles después de eliminar
+          fetchRoles(); // Actualiza la lista de roles después de eliminar
         } else {
           if (response.message) {
             toast.error("Este rol está siendo utilizado, no es posible eliminar");

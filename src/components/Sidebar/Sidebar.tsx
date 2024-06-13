@@ -84,7 +84,7 @@ const Sidebar: React.FC = () => {
             onClick={toggleDashboardMenu}
           />
           {dashboardMenuOpen && (
-            <div className={`p-2 transition-all duration-300 ease-in-out ${sidebarVisible ? 'w-44' : 'w-16'}`}>
+            <div className={`p-2 transition-all duration-300 space-y-2 ease-in-out ${sidebarVisible ? 'w-44' : 'w-16'}`}>
               <SidebarLink
                 to="/content/users"
                 icon={<UserPlusIcon className="h-6 w-6 text-white" />}

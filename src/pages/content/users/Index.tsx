@@ -1,4 +1,3 @@
-import React from 'react';
 import Index from "../../../components/User/Index";
 import ConfirmationModal from "../../../components/Modal";
 import useModalNavigation from "../../../hooks/useModalNavigation";

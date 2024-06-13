@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Table from '../TableIndex';
 import { getUsers } from '../../services/user/authService';
 import { useUserHandlers } from '../../handlers/userHandlers';
@@ -17,7 +17,6 @@ const Index: React.FC<IndexProps> = ({ onAdd }) => {
     setLoading(true);
     try {
       const usersData = await getUsers();
-      console.log(usersData)
       setUsers(usersData);
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
@@ -30,7 +29,7 @@ const Index: React.FC<IndexProps> = ({ onAdd }) => {
     fetchUsers();
   }, []);
 
-  const { handleView } = useUserHandlers(fetchUsers);
+  const { handleView, handleStatusChange } = useUserHandlers(fetchUsers);
 
   const columns = [
     { header: 'ID', accessor: 'id' },
@@ -43,7 +42,7 @@ const Index: React.FC<IndexProps> = ({ onAdd }) => {
   ];
 
   return (
-    <div className="w-full px-10">
+    <div className="w-full pl-10">
       <Table 
         title='Usuarios'
         columns={columns} 
@@ -52,6 +51,7 @@ const Index: React.FC<IndexProps> = ({ onAdd }) => {
         onDelete={() => {}} 
         onView={handleView} 
         onAdd={onAdd} 
+        onStatusChange={handleStatusChange} 
       />
     </div>
   );

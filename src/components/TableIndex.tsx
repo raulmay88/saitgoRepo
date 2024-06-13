@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { PencilSquareIcon, TrashIcon, EyeIcon, ArrowDownIcon, FunnelIcon } from '@heroicons/react/24/solid';
 import SwitchStatus from './SwitchStatus';
 import { TableProps } from '../types/TableTypes';
 import usePagination from '../hooks/usePagination';
+import useSearch from '../hooks/useSearch';
+import useSort from '../hooks/useSort';
 import Pagination from './Pagination';
 import Search from './Search';
 import ButtonAdd from './ButtonAdd';
@@ -15,75 +17,16 @@ interface FilterCriteria {
   value: string | number;
 }
 
-const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, onView, onAdd }) => {
-  const [filteredData, setFilteredData] = useState(data);
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'ascending' | 'descending' } | null>(null);
+const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, onView, onAdd, onStatusChange }) => {
   const [isFilterModalOpen, setFilterModalOpen] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState(columns.map(col => col.accessor));
   const [filters, setFilters] = useState<FilterCriteria[]>([]);
 
-  useEffect(() => {
-    setFilteredData(data);
-  }, [data]);
-
-  useEffect(() => {
-    let filtered = data;
-
-    filters.forEach((filter) => {
-      filtered = filtered.filter((row) => {
-        const rowValue = row[filter.column];
-        const filterValue = filter.value;
-
-        switch (filter.operator) {
-          case '=':
-            return rowValue == filterValue;
-          case '>':
-            return rowValue > filterValue;
-          case '<':
-            return rowValue < filterValue;
-          case 'texto':
-            return String(rowValue).includes(String(filterValue));
-          default:
-            return true;
-        }
-      });
-    });
-
-    if (sortConfig !== null) {
-      filtered = [...filtered].sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-
-    setFilteredData(filtered);
-  }, [data, filters, sortConfig]);
+  const { filteredData, handleSearch } = useSearch(data, columns, filters);
+  const { sortedData, handleSort, sortConfig } = useSort(filteredData);
 
   const rowsPerPage = 10;
-  const { currentPage, totalPages, currentRows, handlePageChange, handleNextPage, handlePreviousPage } = usePagination(filteredData, rowsPerPage);
-
-  const handleSearch = (searchTerm: string) => {
-    const lowercasedTerm = searchTerm.toLowerCase();
-    const filtered = data.filter(row => 
-      columns.some(column => 
-        String(row[column.accessor]).toLowerCase().includes(lowercasedTerm)
-      )
-    );
-    setFilteredData(filtered);
-  };
-
-  const handleSort = (key: string) => {
-    let direction: 'ascending' | 'descending' = 'ascending';
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
-  };
+  const { currentPage, totalPages, currentRows, handlePageChange, handleNextPage, handlePreviousPage } = usePagination(sortedData, rowsPerPage);
 
   const handleFilterClick = () => {
     setFilterModalOpen(true);
@@ -94,7 +37,7 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
   };
 
   return (
-    <div className="overflow-x-auto shadow-xl rounded m-4">
+    <div className="overflow-x-auto shadow-xl rounded ml-8 sm:mx-8 my-4 ">
       <div className="text-xl font-bold bg-cyan-800 text-white p-4 rounded-t flex justify-between items-center">
         {title}
       </div>
@@ -122,7 +65,7 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
                 >
                   <div className="flex items-center justify-center space-x-1">
                     <span>{column.header}</span>
-                    <ArrowDownIcon className={`h-4 w-4 transition-transform duration-300 ${sortConfig && sortConfig.key === column.accessor ? (sortConfig.direction === 'ascending' ? 'rotate-0' : 'rotate-180') : ''}`} />
+                    <ArrowDownIcon className={`h-4 w-4 transition-transform duration-300 ${sortConfig && sortConfig.key === column.accessor ? (sortConfig.direction === 'ascending' ? 'rotate-180' : 'rotate-0') : ''}`} />
                   </div>
                 </th>
               ))}
@@ -135,7 +78,10 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
                 {columns.filter(col => selectedColumns.includes(col.accessor)).map((column, colIndex) => (
                   <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-center">
                     {column.isSwitch ? (
-                      <SwitchStatus initialValue={row[column.accessor]} />
+                      <SwitchStatus 
+                        initialValue={row[column.accessor]} 
+                        onChange={(value) => onStatusChange(row.id, value)} 
+                      />
                     ) : column.isDate ? (
                       format(new Date(row[column.accessor]), "dd/MM/yyyy HH:mm:ss")
                     ) : (
@@ -166,7 +112,7 @@ const Table: React.FC<TableProps> = ({ title, columns, data, onEdit, onDelete, o
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        totalRecords={filteredData.length}
+        totalRecords={sortedData.length}
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         handleNextPage={handleNextPage}

@@ -1,11 +1,15 @@
+// handlers/userHandlers.ts
+
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { User, RegisterFormData, RegisterResponse } from '../types/UserTypes';
-import { register } from '../services/user/authService';
+import { register, updateUserStatus } from '../services/user/authService';
 import { validateUser } from '../validations/userValidation';
+import { useLoading } from '../context/LoadingContext';
 
 export const useUserHandlers = (fetchUsers: () => void) => {
   const navigate = useNavigate();
+  const { setLoading } = useLoading();
 
   const handleView = (rowData: any) => {
     const user = rowData as User;
@@ -34,8 +38,31 @@ export const useUserHandlers = (fetchUsers: () => void) => {
     }
   };
 
+  const handleStatusChange = async (userId: number, status: boolean) => {
+    setLoading(true);
+    try {
+      await updateUserStatus(userId, status);
+      fetchUsers();
+    } catch (error) {
+      toast.error('Error al actualizar el estado del usuario');
+      console.error('Error al actualizar el estado del usuario:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = async (userId : number)=> {
+    setLoading(true)
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
   return {
     handleView,
     handleCreate,
+    handleStatusChange,
   };
 };
